@@ -1,10 +1,10 @@
 #creates
-#nginx-namespace
+#nginx-ingress namespace
 #mydocker secret
 #default-server-secret
 #nginx-ingress service account
 #rbac for nginx-ingress service account
-#deploys nginx+ from Paul's doicker hub
+#deploys nginx+ from Paul's docker hub
 ---
 apiVersion: v1
 kind: Namespace

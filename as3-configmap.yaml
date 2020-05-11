@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: f5-as3-declaration
+  namespace: default
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "123abc",
+        "label": "Sample 2",
+        "remark": "HTTPS with predictive-node pool",
+        "AS3": {
+          "class": "Tenant",
+          "defra": {
+            "class": "Application",
+            "template": "https",
+            "serviceMain": {
+              "class": "Service_HTTPS",
+              "virtualAddresses": [
+                "172.16.10.6"
+              ],
+              "pool": "farming_pool",
+              "clientTLS": "pTlsClient_Local",
+              "serverTLS": "pTlsServer_Local"
+            },
+            "farming_pool": {
+              "class": "Pool",
+              "loadBalancingMode": "predictive-node",
+              "monitors": [
+                "http"
+              ],
+              "members": [{
+                "servicePort": 443,
+                "serverAddresses": []
+              }]
+            },
+            "pTlsClient_Local": {
+              "class": "TLS_Client",
+              "clientCertificate": "tlsclient_local_cert"
+            },
+            "tlsclient_local_cert": {
+              "class": "Certificate",
+              "remark": "Whatcheese",
+              "certificate": "-----BEGIN CERTIFICATE-----\nMIIEljCCAn6gAwIBAgICEAQwDQYJKoZIhvcNAQELBQAwejELMAkGA1UEBhMCR0Ix\nFTATBgNVBAgMDEJlZGZvcmRzaGlyZTEOMAwGA1UEBwwFU2FuZHkxEjAQBgNVBAoM\nCU5HSU5YIEluYzEQMA4GA1UECwwHU0EtRU1FQTEeMBwGA1UEAwwVbWFyay5ib2Rk\naW5ndG9uLm5naW54MB4XDTE5MDYwNDE1MDI0MloXDTIyMDMwMTE1MDI0MlowZzEL\nMAkGA1UEBhMCR0IxFTATBgNVBAgMDEJlZGZvcmRzaGlyZTESMBAGA1UECgwJTkdJ\nTlggSW5jMRAwDgYDVQQLDAdTQS1FTUVBMRswGQYDVQQDDBJ3d3cud2hhdGNoZWVz\nZS5rOHMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDH6Q5pAXso2krS\nioX18Z//NTwx4zEGFPLFyENocTenz0cEtNt3Qc5d+E3TXtQlYltgTUOlquGTrYHc\nxUNGT5K/wXhSquxlWVOcDf+Xd3PAwLbOK4QBa3KyFLHjVn5uFGTxvA2jlceQ23nd\nff2Q1fAh8qdQQwCx4xCtmxz/DPMkwBjgXNM+oycHso+1JzxSXnCORS9BuziOyDXq\nYAGPiRqUsVV2UHZ4umQiLXEYxyt3dxt3+uf3dFvGLp2jxandDAZOX12jE3qLyA6j\nNMVv3Q+dvtaL6RTmmGguituw/r1Cqz/5lbr+2mPjHBrZKN+b2Nz227FwizD1DQaz\n+soB+H/PAgMBAAGjOTA3MAkGA1UdEwQCMAAwCwYDVR0PBAQDAgXgMB0GA1UdEQQW\nMBSCEnd3dy53aGF0Y2hlZXNlLms4czANBgkqhkiG9w0BAQsFAAOCAgEAX98V/Dyr\nKtIKR2EZxyxKZzw0FuBAEx1X+7Y2JkHd9U8OyAbZJZyFMEvY/wQmXw/BKmKFVByV\nhbiJvf8liItfwyrBqEMbfns5yUhri0KMsO/VDnswft3hfoodyTDSjje/FuVZDXqN\nsdLEZYMBAuKq0+HHlYfEPIPuJENBpV0a0wQeM4QEh1ITDdh0/LqNA5WrCgjJCFxx\nJ3mLi5DkgFetDoZPheWCUXlGArWmSHPUu+JcWRcpyPWEw2HMVk/zHfW0yfbhxI7C\nnyYyUuVKBLly5MsHsTcjscFDdaPd0l+LS4yF9iOqfzNmp7Q8hV+C2vSvkOQ8vqHP\nxc1nR1K2SfrMxvdKs3FZs9R18XBt5WN3tsgkAl9feZnkNODQ7OWQvkbFTi/QDhlq\n5AQ+FZ/ojKV1fLoWzlZcXM4cqqJLRQGzH3KgzV7gy7R+oROfhICHNExin/ZOJMnt\nnjn2sHbuYPJrT5ATnU/Lik0qWXgANXcwu5q6o0/bVIbH85ju+rUVGKOxFp847pWZ\nla+k+w8kDIEo3qhcyHSkdXzhJAz0uSYZxroU6/iXwPNIeKPdLg40LRxL1DFuGYUF\nelQThEmb0B+0+mb91YqGQfxu5u2tFrlaOQN/Ej+vIU/cDS1/Kt+N4NRY1L1e6iAk\ntGx9+hBvDJLnHmQzLkJgSOp6a+mbm/RdYCc=\n-----END CERTIFICATE-----",
+              "privateKey": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDH6Q5pAXso2krS\nioX18Z//NTwx4zEGFPLFyENocTenz0cEtNt3Qc5d+E3TXtQlYltgTUOlquGTrYHc\nxUNGT5K/wXhSquxlWVOcDf+Xd3PAwLbOK4QBa3KyFLHjVn5uFGTxvA2jlceQ23nd\nff2Q1fAh8qdQQwCx4xCtmxz/DPMkwBjgXNM+oycHso+1JzxSXnCORS9BuziOyDXq\nYAGPiRqUsVV2UHZ4umQiLXEYxyt3dxt3+uf3dFvGLp2jxandDAZOX12jE3qLyA6j\nNMVv3Q+dvtaL6RTmmGguituw/r1Cqz/5lbr+2mPjHBrZKN+b2Nz227FwizD1DQaz\n+soB+H/PAgMBAAECggEABXHik5eXvCgd65gcR/OZ0QCpMA6pEipV5m8q7thOlMJ/\ng7BNXfUr4sFVlVE64/3G0VupYQTDehs6s0GoMG0QaSqi1VWUdLo3HcP/1ydIvtJA\n6GKlCMjdad5IbhG4BdWGXlMp5++3bMmdixvYYS6CiNosFnKMvUua86+K3aODp9eL\nNvxJsGfpox7olssisxTNtFmDiI5Uub4opzW4KmKr71fASMpi/5NG3J/cqN8LYCnw\nK08Ow6aQ8GhQri1gWFYiQHeQeY0DxSpGMOVIUkCjWAHwT7nzl78xjknt+QTFTQdl\nFdKW8qyhvDnRT5JQx+m5+73oNP8lG4Pwh+xS+U2FGQKBgQD2/BfTJOiVIBqcH7Db\nzurwEvZpwEZ4DnQ7wmWDX3NQ3gUkfagEVvzPJ3COksyHAa4r+o+ZVBZ+7wcsYVur\nhcWni5CJGLQy9F3B1myq83qWAP3BV+ZTAgsU0GJ8P+Tdunh2yoTu+DQMWiffl7lR\nvd2j1ICzxo9ngHnfAEQonX94HQKBgQDPNRW4Jh6rSOVLipopH49/vhvgByP3tNXb\nRMB/m2J4ZNOKh4yCfKCxPzACHQo9UCof7fgh7wsrb9trKk/RD+2CrCyiLzthGA3j\nXSKRlsd/r8nJGLlILLi82pMJr4ZAOVzKcYO1CpUStw4c8FCrPCI/YJ1BzRIAbtTV\nZm6mUnmL2wKBgB6tORhUoT7EegmiNglXLf8bm9eOtjH7OZyijJFArcYBjYn2wYOo\nekYQk/5hZV3va36y5FsbAqBJeA6fGQ+40c/5mb4tf1RE3dBRnbWuAC/Zd6soC8eL\nnWy8ZT8hgH+5xXSbut8jnPNbz1AKPE5W0syifEnYA7/LSVfVZKHWzhpRAoGAZvdz\nNpJC1U0hHJvgpaTYU1tuULJbrkE/sHmGyyK1GSzJbmKTcVhrJglHWxWBPBy1Ai7o\nCjzWqRwpxiQ9i59FoJTcjS+5azNf22cxwXVS5+G7/WF62SHYH4jiXoLJzOp0cOld\n0L5Ue/tZWQoWnDECt8nT+5njYzGwM+d1/tKnMdcCgYAfkY5n3b1LR8uQLW0nLRR5\nHBMV//mMbMrv49mghCdeJ4nrWVatQj2Io67dzp4PaAFYwDtzIn6MI1rpcAgBwmAH\nY0nAa1FkHdiHOuIzbnkGfRIXQMpVQG8L6142jzLmj6gkPlDbbnG8tJxrhgUzG5u3\nh8K9TsX5ZAw0MxoGzaBzMg==\n-----END PRIVATE KEY-----"
+            },
+            "pTlsServer_Local": {
+              "class": "TLS_Server",
+              "certificates": [{
+                "certificate": "tlsserver_local_cert"
+              }]
+            },
+            "tlsserver_local_cert": {
+              "class": "Certificate",
+              "remark": "Whatcheese",
+              "certificate": "-----BEGIN CERTIFICATE-----\nMIIEljCCAn6gAwIBAgICEAQwDQYJKoZIhvcNAQELBQAwejELMAkGA1UEBhMCR0Ix\nFTATBgNVBAgMDEJlZGZvcmRzaGlyZTEOMAwGA1UEBwwFU2FuZHkxEjAQBgNVBAoM\nCU5HSU5YIEluYzEQMA4GA1UECwwHU0EtRU1FQTEeMBwGA1UEAwwVbWFyay5ib2Rk\naW5ndG9uLm5naW54MB4XDTE5MDYwNDE1MDI0MloXDTIyMDMwMTE1MDI0MlowZzEL\nMAkGA1UEBhMCR0IxFTATBgNVBAgMDEJlZGZvcmRzaGlyZTESMBAGA1UECgwJTkdJ\nTlggSW5jMRAwDgYDVQQLDAdTQS1FTUVBMRswGQYDVQQDDBJ3d3cud2hhdGNoZWVz\nZS5rOHMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDH6Q5pAXso2krS\nioX18Z//NTwx4zEGFPLFyENocTenz0cEtNt3Qc5d+E3TXtQlYltgTUOlquGTrYHc\nxUNGT5K/wXhSquxlWVOcDf+Xd3PAwLbOK4QBa3KyFLHjVn5uFGTxvA2jlceQ23nd\nff2Q1fAh8qdQQwCx4xCtmxz/DPMkwBjgXNM+oycHso+1JzxSXnCORS9BuziOyDXq\nYAGPiRqUsVV2UHZ4umQiLXEYxyt3dxt3+uf3dFvGLp2jxandDAZOX12jE3qLyA6j\nNMVv3Q+dvtaL6RTmmGguituw/r1Cqz/5lbr+2mPjHBrZKN+b2Nz227FwizD1DQaz\n+soB+H/PAgMBAAGjOTA3MAkGA1UdEwQCMAAwCwYDVR0PBAQDAgXgMB0GA1UdEQQW\nMBSCEnd3dy53aGF0Y2hlZXNlLms4czANBgkqhkiG9w0BAQsFAAOCAgEAX98V/Dyr\nKtIKR2EZxyxKZzw0FuBAEx1X+7Y2JkHd9U8OyAbZJZyFMEvY/wQmXw/BKmKFVByV\nhbiJvf8liItfwyrBqEMbfns5yUhri0KMsO/VDnswft3hfoodyTDSjje/FuVZDXqN\nsdLEZYMBAuKq0+HHlYfEPIPuJENBpV0a0wQeM4QEh1ITDdh0/LqNA5WrCgjJCFxx\nJ3mLi5DkgFetDoZPheWCUXlGArWmSHPUu+JcWRcpyPWEw2HMVk/zHfW0yfbhxI7C\nnyYyUuVKBLly5MsHsTcjscFDdaPd0l+LS4yF9iOqfzNmp7Q8hV+C2vSvkOQ8vqHP\nxc1nR1K2SfrMxvdKs3FZs9R18XBt5WN3tsgkAl9feZnkNODQ7OWQvkbFTi/QDhlq\n5AQ+FZ/ojKV1fLoWzlZcXM4cqqJLRQGzH3KgzV7gy7R+oROfhICHNExin/ZOJMnt\nnjn2sHbuYPJrT5ATnU/Lik0qWXgANXcwu5q6o0/bVIbH85ju+rUVGKOxFp847pWZ\nla+k+w8kDIEo3qhcyHSkdXzhJAz0uSYZxroU6/iXwPNIeKPdLg40LRxL1DFuGYUF\nelQThEmb0B+0+mb91YqGQfxu5u2tFrlaOQN/Ej+vIU/cDS1/Kt+N4NRY1L1e6iAk\ntGx9+hBvDJLnHmQzLkJgSOp6a+mbm/RdYCc=\n-----END CERTIFICATE-----",
+              "privateKey": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDH6Q5pAXso2krS\nioX18Z//NTwx4zEGFPLFyENocTenz0cEtNt3Qc5d+E3TXtQlYltgTUOlquGTrYHc\nxUNGT5K/wXhSquxlWVOcDf+Xd3PAwLbOK4QBa3KyFLHjVn5uFGTxvA2jlceQ23nd\nff2Q1fAh8qdQQwCx4xCtmxz/DPMkwBjgXNM+oycHso+1JzxSXnCORS9BuziOyDXq\nYAGPiRqUsVV2UHZ4umQiLXEYxyt3dxt3+uf3dFvGLp2jxandDAZOX12jE3qLyA6j\nNMVv3Q+dvtaL6RTmmGguituw/r1Cqz/5lbr+2mPjHBrZKN+b2Nz227FwizD1DQaz\n+soB+H/PAgMBAAECggEABXHik5eXvCgd65gcR/OZ0QCpMA6pEipV5m8q7thOlMJ/\ng7BNXfUr4sFVlVE64/3G0VupYQTDehs6s0GoMG0QaSqi1VWUdLo3HcP/1ydIvtJA\n6GKlCMjdad5IbhG4BdWGXlMp5++3bMmdixvYYS6CiNosFnKMvUua86+K3aODp9eL\nNvxJsGfpox7olssisxTNtFmDiI5Uub4opzW4KmKr71fASMpi/5NG3J/cqN8LYCnw\nK08Ow6aQ8GhQri1gWFYiQHeQeY0DxSpGMOVIUkCjWAHwT7nzl78xjknt+QTFTQdl\nFdKW8qyhvDnRT5JQx+m5+73oNP8lG4Pwh+xS+U2FGQKBgQD2/BfTJOiVIBqcH7Db\nzurwEvZpwEZ4DnQ7wmWDX3NQ3gUkfagEVvzPJ3COksyHAa4r+o+ZVBZ+7wcsYVur\nhcWni5CJGLQy9F3B1myq83qWAP3BV+ZTAgsU0GJ8P+Tdunh2yoTu+DQMWiffl7lR\nvd2j1ICzxo9ngHnfAEQonX94HQKBgQDPNRW4Jh6rSOVLipopH49/vhvgByP3tNXb\nRMB/m2J4ZNOKh4yCfKCxPzACHQo9UCof7fgh7wsrb9trKk/RD+2CrCyiLzthGA3j\nXSKRlsd/r8nJGLlILLi82pMJr4ZAOVzKcYO1CpUStw4c8FCrPCI/YJ1BzRIAbtTV\nZm6mUnmL2wKBgB6tORhUoT7EegmiNglXLf8bm9eOtjH7OZyijJFArcYBjYn2wYOo\nekYQk/5hZV3va36y5FsbAqBJeA6fGQ+40c/5mb4tf1RE3dBRnbWuAC/Zd6soC8eL\nnWy8ZT8hgH+5xXSbut8jnPNbz1AKPE5W0syifEnYA7/LSVfVZKHWzhpRAoGAZvdz\nNpJC1U0hHJvgpaTYU1tuULJbrkE/sHmGyyK1GSzJbmKTcVhrJglHWxWBPBy1Ai7o\nCjzWqRwpxiQ9i59FoJTcjS+5azNf22cxwXVS5+G7/WF62SHYH4jiXoLJzOp0cOld\n0L5Ue/tZWQoWnDECt8nT+5njYzGwM+d1/tKnMdcCgYAfkY5n3b1LR8uQLW0nLRR5\nHBMV//mMbMrv49mghCdeJ4nrWVatQj2Io67dzp4PaAFYwDtzIn6MI1rpcAgBwmAH\nY0nAa1FkHdiHOuIzbnkGfRIXQMpVQG8L6142jzLmj6gkPlDbbnG8tJxrhgUzG5u3\nh8K9TsX5ZAw0MxoGzaBzMg==\n-----END PRIVATE KEY-----"
+            }
+          }
+        }
+      }
+    }
+  
