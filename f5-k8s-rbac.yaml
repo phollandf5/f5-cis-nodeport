@@ -2,7 +2,6 @@
 #
 #kubectl create serviceaccount bigip-ctlr -n kube-system
 #
----
 # for use in k8s clusters only
 # for OpenShift, use the OpenShift-specific examples
 
